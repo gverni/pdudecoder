@@ -61,5 +61,11 @@ def test():
     print test_decode_ar
     print test_decode_hash
 
-
+in_decode_ar, in_decode_hash = create_decode("pdude.txt")
+in_decode_ar.reverse() #Usually the decode array is given from higher to lowe bit
+input_vector = map(int, list(raw_input())) #map(int, list(raw_input())).reverse()
+#print input_vector
+#print in_decode_ar
+#print in_decode_hash
+decode(input_vector, in_decode_ar, in_decode_hash)
 
