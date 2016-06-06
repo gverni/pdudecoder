@@ -44,18 +44,22 @@ def create_decode(input_file): #Return decode_ar and decode_hash
     return decode_ar, decode_hash
 
 
-test_decode_ar = [1, 1, 1, 2, 3, 3, 3, 3]
-test_decode_hash = {1: "first field", 2: "second field", 3: "third field"}
+def test():
+    test_decode_ar = [1, 1, 1, 2, 3, 3, 3, 3]
+    test_decode_hash = {1: "first field", 2: "second field", 3: "third field"}
 
-#Test input vector long as decoder
-decode([0, 0, 1, 1, 0, 0, 1, 1], test_decode_ar, test_decode_hash)
+    #Test input vector long as decoder
+    decode([0, 0, 1, 1, 0, 0, 1, 1], test_decode_ar, test_decode_hash)
 
-#Test input vector longer than decoder
-decode([0, 0, 1, 1, 0, 0, 1, 1, 1], test_decode_ar, test_decode_hash)
+    #Test input vector longer than decoder
+    decode([0, 0, 1, 1, 0, 0, 1, 1, 1], test_decode_ar, test_decode_hash)
 
-#Test input smaller than decoder
-decode([0, 0, 1, 1, 0, 1], test_decode_ar, test_decode_hash)
+    #Test input smaller than decoder
+    decode([0, 0, 1, 1, 0, 1], test_decode_ar, test_decode_hash)
 
-test_decode_ar, test_decode_hash = create_decode("pdude.txt")
-print test_decode_ar
-print test_decode_hash
+    test_decode_ar, test_decode_hash = create_decode("pdude.txt")
+    print test_decode_ar
+    print test_decode_hash
+
+
+
