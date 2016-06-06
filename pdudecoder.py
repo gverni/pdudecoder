@@ -1,32 +1,28 @@
 import re
-def extract_value(input_ar, decode_ar, start_index):
-    value = "" + str(input_ar[start_index])
-    for a_i in range(start_index+1, min(len(decode_ar), len(input_ar))):
-        if decode_ar[a_i] <> decode_ar[start_index]:
-            break
-        else:
-            value += str(input_ar[a_i])
-
-    if a_i == len(decode_ar)- 1: #Input array bigger than decoder array. We should not decode further
-        return (int(value,2), a_i)
-    elif a_i == len(input_ar) -1: #Input array is smaller than decoder array. Return error
-        return value, -1
-    else: #Detected a different decoder function. Hence we go back one position and return
-        return (int(value,2), a_i-1)
 
 def decode(input_ar, decode_ar, decode_hash):
+    print "Length of input vector: " + str(len(input_ar))
+    print "Length of decode vector: " + str(len(decode_ar))
+    if len(input_ar) > len(decode_ar):
+        print "Warning: decoding array shorter than input vector. Leftmost bits of input array will not be decoded"
+        decode_ar = [0] * (len(input_ar) - len(decode_ar)) + decode_ar
+    elif len(input_ar) < len(decode_ar):
+        print "Warning: input vector shorter than decoding array. Padding the leftmost bits to 0"
+        input_ar = [0] * (len(decode_ar) - len(input_ar)) + input_ar
+
     a_i = 0
-    while a_i <= len(input_ar)-1:
-        if (a_i > (len(decode_ar) - 1)) or decode_ar[a_i] == 0: #If decode function is not specified (either 0, or array too short)
-            print "[" + str(a_i) + "]: " + str(input_ar[a_i])
-        else:
-            value, new_pos = extract_value(input_ar, decode_ar, a_i)
-            if new_pos == -1:
-                print "Unencoded bits: " + value
-                break
-            print decode_hash[decode_ar[a_i]] + ": " + str(value)
-            a_i = new_pos
-        a_i += 1
+    value = ""
+    num_bit = 0
+    while a_i < len(input_ar):
+        decode_func = decode_ar[a_i]
+        while a_i < len(input_ar) and decode_ar[a_i] == decode_func:
+            value += str(input_ar[a_i])
+            num_bit += 1
+            a_i += 1
+        print decode_hash[decode_func] + " [" + str(num_bit) + "]: " + value + "b = " + str(int(value, 2))
+        value = ""
+        num_bit = 0
+
 
 def create_decode(input_file): #Return decode_ar and decode_hash
     finput =  open(input_file, 'r')
@@ -46,6 +42,7 @@ def create_decode(input_file): #Return decode_ar and decode_hash
             decode_ar[a_i] = decode_string_pos
 
     return decode_ar, decode_hash
+
 
 test_decode_ar = [1, 1, 1, 2, 3, 3, 3, 3]
 test_decode_hash = {1: "first field", 2: "second field", 3: "third field"}
