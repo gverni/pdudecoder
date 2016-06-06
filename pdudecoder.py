@@ -24,21 +24,25 @@ def decode(input_ar, decode_ar, decode_hash):
         num_bit = 0
 
 
-def create_decode(input_file): #Return decode_ar and decode_hash
-    finput =  open(input_file, 'r')
+def create_decode(input_file):  # Return decode_ar and decode_hash
+    finput = open(input_file, 'r')
     decode_ar = []
-    decode_hash = {}
+    decode_hash = {0: "Undecoded bit(s)"}
+
     for line in finput:
-        #We are looking for [XX:XX]
-        line_decoded = re.search(r"\[([0-9]+)\:([0-9]+)\] (.+)",line)
+        # We are looking for [XX:XX]
+        line_decoded = re.search(r"\[([0-9]+)\:([0-9]+)\] (.+)", line)
         start_bit = int(line_decoded.group(1))
-        stop_bit = int(line_decoded.group(2)) + 1
+        stop_bit = int(line_decoded.group(2))
         decode_string = line_decoded.group(3)
-        decode_string_pos = len(decode_hash) + 1 #Use +1 because we want to avoid using the index 0, which menas no function defined
+        decode_string_pos = len(
+            decode_hash)  # Use +1 because we want to avoid using the index 0, which means no function defined
         decode_hash[decode_string_pos] = decode_string
-        if stop_bit > len(decode_ar):
-            decode_ar = decode_ar + [0]*(stop_bit-len(decode_ar))
-        for a_i in range(start_bit, stop_bit):
+        if max(start_bit, stop_bit) > len(
+                decode_ar) - 1:  # We use max function because user can give input bits in whichever order
+            decode_ar = decode_ar + [0] * ((max(start_bit, stop_bit) + 1) - len(decode_ar))
+        for a_i in range(min(start_bit, stop_bit), max(start_bit,
+                                                       stop_bit) + 1):  # We use max function because user can give input bits in whichever order. We also add +1 to the right argument because range generate numbers until right argument -1
             decode_ar[a_i] = decode_string_pos
 
     return decode_ar, decode_hash
